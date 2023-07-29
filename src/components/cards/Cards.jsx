@@ -5,6 +5,7 @@ import Card from "../card/Card";
 import "./cards.scss";
 import { v4 as uuidv4 } from "uuid";
 import { addCharacters } from "../../store/store";
+import { Link } from "react-router-dom";
 
 const Cards = () => {
   const [characters, setCharacters] = useState([]);
@@ -34,15 +35,8 @@ const Cards = () => {
         `/?page=${page}&name=${query}&gender=${gender}&status=${status}&species=${species}`
       );
       const newCharacters = response.data.results;
-      const totalCharacters = response.data.info.count;
-
-      if (characters.length < totalCharacters) {
-        setCharacters((prevCharacters) => [
-          ...prevCharacters,
-          ...newCharacters,
-        ]);
-        dispatch(addCharacters(newCharacters));
-      }
+      setCharacters((prevCharacters) => [...prevCharacters, ...newCharacters]);
+      dispatch(addCharacters(newCharacters));
     } catch (error) {
       console.error("Error fetching characters:", error);
     }
@@ -60,7 +54,9 @@ const Cards = () => {
   return (
     <div className="cards">
       {characters.map((character) => (
-        <Card key={uuidv4()} data={character} />
+        <Link key={uuidv4()} to={`/characters/${character.id}`}>
+          <Card data={character} />
+        </Link>
       ))}
     </div>
   );

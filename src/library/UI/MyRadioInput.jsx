@@ -6,9 +6,6 @@ function MyRadioInput({ name, label }) {
   const dispatch = useDispatch();
 
   const handleClick = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-
     switch (e.target.name) {
       case "gender":
         dispatch(changeGender(e.target.value));
