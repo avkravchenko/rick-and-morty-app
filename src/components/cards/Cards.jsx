@@ -5,11 +5,12 @@ import Card from "../card/Card";
 import "./cards.scss";
 import { v4 as uuidv4 } from "uuid";
 import { addCharacters } from "../../store/store";
-import { Link } from "react-router-dom";
+import CharacterDetailsPage from "../cardDetails/CardDetails";
 
 const Cards = () => {
   const [characters, setCharacters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
   const searchQuery = useSelector((state) => state.search.searchQuery);
   const gender = useSelector((state) => state.gender.gender);
   const status = useSelector((state) => state.status.status);
@@ -51,13 +52,34 @@ const Cards = () => {
     }
   };
 
+  const handleCardClick = (character) => {
+    setSelectedCharacter(character);
+  };
+
+  const handlePopupClose = () => {
+    setSelectedCharacter(null);
+  };
+
   return (
     <div className="cards">
       {characters.map((character) => (
-        <Link key={uuidv4()} to={`/characters/${character.id}`}>
+        // Replace the Link with a click event handler for showing the popup
+        <div
+          key={uuidv4()}
+          onClick={() => handleCardClick(character)}
+          style={{ cursor: "pointer" }}
+        >
           <Card data={character} />
-        </Link>
+        </div>
       ))}
+
+      {/* Show the CardPopup when a character is selected */}
+      {selectedCharacter && (
+        <CharacterDetailsPage
+          character={selectedCharacter}
+          onClose={handlePopupClose}
+        />
+      )}
     </div>
   );
 };
