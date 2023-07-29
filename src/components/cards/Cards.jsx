@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { instance } from "../../axiosInstance";
 import Card from "../card/Card";
 import "./cards.scss";
 import { v4 as uuidv4 } from "uuid";
-import { addCharacters } from "../../store/store";
 import CharacterDetailsPage from "../cardDetails/CardDetails";
 
 const Cards = () => {
@@ -15,7 +14,6 @@ const Cards = () => {
   const gender = useSelector((state) => state.gender.gender);
   const status = useSelector((state) => state.status.status);
   const species = useSelector((state) => state.species.species);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setCharacters([]);
@@ -37,7 +35,6 @@ const Cards = () => {
       );
       const newCharacters = response.data.results;
       setCharacters((prevCharacters) => [...prevCharacters, ...newCharacters]);
-      dispatch(addCharacters(newCharacters));
     } catch (error) {
       console.error("Error fetching characters:", error);
     }
@@ -63,7 +60,6 @@ const Cards = () => {
   return (
     <div className="cards">
       {characters.map((character) => (
-        // Replace the Link with a click event handler for showing the popup
         <div
           key={uuidv4()}
           onClick={() => handleCardClick(character)}
@@ -72,8 +68,6 @@ const Cards = () => {
           <Card data={character} />
         </div>
       ))}
-
-      {/* Show the CardPopup when a character is selected */}
       {selectedCharacter && (
         <CharacterDetailsPage
           character={selectedCharacter}

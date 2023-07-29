@@ -22,7 +22,6 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<MainContent />} />
-        <Route path="/characters/:id" element={<CharacterDetailsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
