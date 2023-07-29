@@ -48,12 +48,28 @@ const speciesSlice = createSlice({
   },
 });
 
+const pageSlice = createSlice({
+  name: "currentPage",
+  initialState: {
+    currentPage: 1,
+  },
+  reducers: {
+    setToFirst: (state, action) => {
+      state.currentPage = 1;
+    },
+    incrementCurrentPage: (state, action) => {
+      state.currentPage += 1;
+    },
+  },
+});
+
 const store = configureStore({
   reducer: {
     search: searchSlice.reducer,
     gender: genderSlice.reducer,
     status: statusSlice.reducer,
     species: speciesSlice.reducer,
+    currentPage: pageSlice.reducer,
   },
 });
 
@@ -61,5 +77,6 @@ export const { changeSearchQuery } = searchSlice.actions;
 export const { changeGender } = genderSlice.actions;
 export const { changeStatus } = statusSlice.actions;
 export const { changeSpecies } = speciesSlice.actions;
+export const { setToFirst, incrementCurrentPage } = pageSlice.actions;
 
 export default store;

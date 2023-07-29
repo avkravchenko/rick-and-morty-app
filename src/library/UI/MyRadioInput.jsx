@@ -1,6 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { changeGender, changeStatus, changeSpecies } from "../../store/store";
+import {
+  changeGender,
+  changeStatus,
+  changeSpecies,
+  setToFirst,
+} from "../../store/store";
 
 function MyRadioInput({ name, label }) {
   const dispatch = useDispatch();
@@ -9,12 +14,15 @@ function MyRadioInput({ name, label }) {
     switch (e.target.name) {
       case "gender":
         dispatch(changeGender(e.target.value));
+        dispatch(setToFirst());
         break;
       case "status":
         dispatch(changeStatus(e.target.value));
+        dispatch(setToFirst());
         break;
       case "species":
         dispatch(changeSpecies(e.target.value));
+        dispatch(setToFirst());
         break;
       default:
         break;
