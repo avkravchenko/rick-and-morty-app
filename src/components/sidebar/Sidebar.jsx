@@ -16,9 +16,11 @@ function Sidebar() {
         </h1>
 
         <SearchInput />
-        <GenderCheck />
-        <StatusCheck />
-        <SpeciesCheck />
+        <div className="checks">
+          <GenderCheck />
+          <StatusCheck />
+          <SpeciesCheck />
+        </div>
       </div>
     </>
   );
