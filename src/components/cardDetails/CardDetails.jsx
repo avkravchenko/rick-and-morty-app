@@ -1,7 +1,7 @@
 import "./card-details.scss";
 import React from "react";
 
-const CharacterDetailsPage = ({ character, onClose }) => {
+const CharacterDetailsPage = React.memo(({ character, onClose }) => {
   return (
     <div className="character-details">
       <p onClick={onClose} className="character-details__back">
@@ -16,6 +16,6 @@ const CharacterDetailsPage = ({ character, onClose }) => {
       <p>Where: {character.location.name}</p>
     </div>
   );
-};
+});
 
 export default CharacterDetailsPage;

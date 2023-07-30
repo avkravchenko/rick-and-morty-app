@@ -1,7 +1,7 @@
 import React from "react";
 import "./card.scss";
 
-function Card({ data }) {
+const Card = React.memo(({ data }) => {
   return (
     <div className="card">
       <div className="card__img-wrapper">
@@ -14,6 +14,6 @@ function Card({ data }) {
       </div>
     </div>
   );
-}
+});
 
 export default Card;
