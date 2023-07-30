@@ -2,7 +2,6 @@ import Sidebar from "./components/sidebar/Sidebar";
 import "./app.scss";
 import Cards from "./components/cards/Cards";
 import { Routes, Route } from "react-router-dom";
-import CharacterDetailsPage from "./components/cardDetails/CardDetails";
 
 const NotFound = () => {
   return <h2 style={{ margin: "auto" }}>404 Not Found</h2>;
@@ -22,7 +21,6 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<MainContent />} />
-        <Route path="/characters/:id" element={<CharacterDetailsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

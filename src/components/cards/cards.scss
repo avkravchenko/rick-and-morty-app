@@ -5,3 +5,13 @@
   margin: 1rem 1rem 1rem 20rem;
   justify-content: center;
 }
+
+@media screen and (max-width: 570px) {
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem;
+    justify-content: center;
+  }
+}

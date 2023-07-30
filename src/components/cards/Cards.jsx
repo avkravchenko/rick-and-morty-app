@@ -1,63 +1,117 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../../axiosInstance";
 import Card from "../card/Card";
 import "./cards.scss";
 import { v4 as uuidv4 } from "uuid";
-import { addCharacters } from "../../store/store";
-import { Link } from "react-router-dom";
+import CharacterDetailsPage from "../cardDetails/CardDetails";
+import { incrementCurrentPage } from "../../store/store";
 
 const Cards = () => {
   const [characters, setCharacters] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [hasMoreCharacters, setHasMoreCharacters] = useState(true);
+  const [totalCharacters, setTotalCharacters] = useState(0);
+  const [charactersFetched, setCharactersFetched] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const searchQuery = useSelector((state) => state.search.searchQuery);
   const gender = useSelector((state) => state.gender.gender);
   const status = useSelector((state) => state.status.status);
   const species = useSelector((state) => state.species.species);
+  const currentPage = useSelector((state) => state.currentPage.currentPage);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setCharacters([]);
-    setCurrentPage(1);
+    setHasMoreCharacters(true);
+    setCharactersFetched(0);
   }, [searchQuery, gender, status, species]);
-
-  useEffect(() => {
-    fetchCharacters(currentPage, searchQuery, gender, status, species);
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [currentPage, searchQuery, gender, status, species]);
 
   const fetchCharacters = async (page, query, gender, status, species) => {
     try {
       const response = await instance.get(
         `/?page=${page}&name=${query}&gender=${gender}&status=${status}&species=${species}`
       );
-      const newCharacters = response.data.results;
-      setCharacters((prevCharacters) => [...prevCharacters, ...newCharacters]);
-      dispatch(addCharacters(newCharacters));
+      return response.data;
     } catch (error) {
       console.error("Error fetching characters:", error);
+      return null;
     }
   };
 
+  const fetchAndAppendCharacters = async () => {
+    const response = await fetchCharacters(
+      currentPage,
+      searchQuery,
+      gender,
+      status,
+      species
+    );
+
+    if (response) {
+      const newCharacters = response.results;
+      setCharacters((prevCharacters) => [...prevCharacters, ...newCharacters]);
+      setTotalCharacters(response.info.count);
+      setCharactersFetched((prevFetched) => prevFetched + newCharacters.length);
+      setHasMoreCharacters(response.info.next !== null);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndAppendCharacters();
+  }, [currentPage, searchQuery, gender, status, species]);
+
   const handleScroll = () => {
     if (
-      window.innerHeight + window.scrollY >=
-      document.body.scrollHeight - 200
+      hasMoreCharacters &&
+      charactersFetched < totalCharacters &&
+      window.innerHeight + window.scrollY >= document.body.scrollHeight - 5
     ) {
-      setCurrentPage((prevPage) => prevPage + 1);
+      const debouncedScroll = setTimeout(() => {
+        dispatch(incrementCurrentPage());
+      }, 200);
+
+      return () => clearTimeout(debouncedScroll);
     }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
+  const handleCardClick = (character) => {
+    setSelectedCharacter(character);
+    setIsPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setSelectedCharacter(null);
+    setIsPopupOpen(false);
   };
 
   return (
     <div className="cards">
+      {isPopupOpen && (
+        <div className="overlay" onClick={handlePopupClose}></div>
+      )}
       {characters.map((character) => (
-        <Link key={uuidv4()} to={`/characters/${character.id}`}>
+        <div
+          key={uuidv4()}
+          onClick={() => handleCardClick(character)}
+          style={{ cursor: "pointer" }}
+        >
           <Card data={character} />
-        </Link>
+        </div>
       ))}
+      {selectedCharacter && (
+        <CharacterDetailsPage
+          character={selectedCharacter}
+          onClose={handlePopupClose}
+        />
+      )}
     </div>
   );
 };

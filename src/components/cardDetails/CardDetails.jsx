@@ -1,22 +1,12 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
 import "./card-details.scss";
+import React from "react";
 
-const CharacterDetailsPage = () => {
-  const { id } = useParams();
-  const characters = useSelector((state) => state.characters.characters);
-  const character = characters.find((char) => char.id === +id);
-
-  if (!character) {
-    return <div>Character not found!</div>;
-  }
-
+const CharacterDetailsPage = ({ character, onClose }) => {
   return (
     <div className="character-details">
-      <Link className="character-details__back" to="/">
-        Back to Characters
-      </Link>
+      <p onClick={onClose} className="character-details__back">
+        Back to characters
+      </p>
       <h2>{character.name}</h2>
       <img src={character.image} alt={character.name} />
       <p>Gender: {character.gender}</p>

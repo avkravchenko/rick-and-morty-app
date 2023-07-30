@@ -13,7 +13,7 @@ function SearchInput() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="search-form" onSubmit={handleSubmit}>
       <input
         className="search-input"
         type="text"
