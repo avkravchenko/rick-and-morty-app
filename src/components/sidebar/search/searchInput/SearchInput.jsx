@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { changeSearchQuery } from "../../../../store/store";
+import { changeSearchQuery, setToFirst } from "../../../../store/store";
 import "./search-input.scss";
 
 function SearchInput() {
@@ -10,6 +10,7 @@ function SearchInput() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(changeSearchQuery(inputValue));
+    dispatch(setToFirst());
   };
 
   return (

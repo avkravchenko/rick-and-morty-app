@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<MainContent />} />
+        <Route path="/rick-and-morty-app/" element={<MainContent />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
