@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../../axiosInstance";
 import Card from "../card/Card";
 import "./cards.scss";
-import { v4 as uuidv4 } from "uuid";
 import CharacterDetailsPage from "../cardDetails/CardDetails";
 import { incrementCurrentPage } from "../../store/store";
 
@@ -99,7 +98,7 @@ const Cards = () => {
       )}
       {characters.map((character) => (
         <div
-          key={uuidv4()}
+          key={character.id}
           onClick={() => handleCardClick(character)}
           style={{ cursor: "pointer" }}
         >
