@@ -4,5 +4,18 @@
 }
 
 .main-content {
-  margin: 1rem;
+  display: flex;
+
+  gap: 1rem;
+}
+
+@media screen and (max-width: 650px) {
+  .main-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .App {
+    justify-content: center;
+  }
 }
